@@ -31,3 +31,4 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 
     user = await AuthService.get_user_by_id(db, int(user_id))
     return user
+
