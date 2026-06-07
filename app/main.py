@@ -14,6 +14,10 @@ app = FastAPI(
     description="A professional task management API built with FastAPI and PostgreSQL",
 )
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Task Management API! Head over to /docs to explore endpoints."}
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
