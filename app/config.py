@@ -2,6 +2,8 @@
 
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+import os
+import sys
 
 
 class Settings(BaseSettings):
@@ -32,4 +34,12 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     """Get cached application settings"""
-    return Settings()
+    s = Settings()
+
+    # When running under pytest prefer an in-memory SQLite DB so tests don't
+    # require a running PostgreSQL instance. Detect pytest by presence of the
+    # 'pytest' module in sys.modules or the PYTEST_CURRENT_TEST env var.
+    if "pytest" in sys.modules or os.environ.get("PYTEST_CURRENT_TEST"):
+        s.database_url = "sqlite+aiosqlite:///:memory:"
+
+    return s
